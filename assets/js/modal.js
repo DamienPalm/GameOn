@@ -5,7 +5,7 @@ const formData = document.querySelectorAll(".formData");
 const burgerMenu = document.getElementById("myTopnav");
 const subscribeForm = document.getElementById("subscribeForm");
 const modalBody = document.querySelector(".modal-body");
-let originalModalContent;
+let originalModalContent = modalBody.innerHTML;
 let isValid = true;
 
 modalOpenButton.forEach((btn) => btn.addEventListener("click", launchModal));
@@ -19,10 +19,12 @@ subscribeForm.addEventListener("submit", function (event) {
 
 function launchModal() {
   modalBackground.classList.add("active");
+  document.body.setAttribute("class", "no-scroll");
 }
 
 function closeModal() {
   modalBackground.classList.remove("active");
+  document.body.removeAttribute("class", "no-scroll");
   modalBody.innerHTML = originalModalContent;
 }
 
