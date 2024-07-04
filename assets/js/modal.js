@@ -1,12 +1,10 @@
 const modalCloseButton = document.querySelector(".close");
 const modalBackground = document.querySelector(".bground");
 const modalOpenButton = document.querySelectorAll(".modal-btn");
-const formData = document.querySelectorAll(".formData");
 const burgerMenu = document.getElementById("myTopnav");
 const subscribeForm = document.getElementById("subscribeForm");
 const modalBody = document.querySelector(".modal-body");
 let originalModalContent = modalBody.innerHTML;
-let isValid = true;
 
 modalOpenButton.forEach((btn) => btn.addEventListener("click", launchModal));
 modalCloseButton.addEventListener("click", closeModal);
@@ -33,31 +31,45 @@ function editNav() {
 }
 
 function validate() {
-  const firstName = document.getElementById("first").value.trim();
-  const firstFormData = document.getElementById("first").closest(".formData");
-  const lastName = document.getElementById("last").value.trim();
-  const lastFormData = document.getElementById("last").closest(".formData");
-  const email = document.getElementById("email").value.trim();
-  const emailFormData = document.getElementById("email").closest(".formData");
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const birthdate = document.getElementById("birthdate").value;
-  const birthdateFormData = document
-    .getElementById("birthdate")
-    .closest(".formData");
-  const quantity = document.getElementById("quantity").value;
-  const quantityFormData = document
-    .getElementById("quantity")
-    .closest(".formData");
-  const tournamentLocation = document.querySelector(
+  const formData = document.querySelectorAll(".formData");
+  const firstNameElement = document.getElementById("first");
+  const lastNameElement = document.getElementById("last");
+  const emailElement = document.getElementById("email");
+  const birthdateElement = document.getElementById("birthdate");
+  const quantityElement = document.getElementById("quantity");
+  const termsOfUseElement = document.getElementById("termsOfUse");
+  const tournamentLocationElement = document.querySelector(
     "input[name='location']:checked"
   );
+  let isValid = true;
+
+  if (
+    !firstNameElement ||
+    !lastNameElement ||
+    !emailElement ||
+    !birthdateElement ||
+    !quantityElement ||
+    !termsOfUseElement
+  ) {
+    return false;
+  }
+
+  const firstName = firstNameElement.value.trim();
+  const firstFormData = firstNameElement.closest(".formData");
+  const lastName = lastNameElement.value.trim();
+  const lastFormData = lastNameElement.closest(".formData");
+  const email = emailElement.value.trim();
+  const emailFormData = emailElement.closest(".formData");
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const birthdate = birthdateElement.value;
+  const birthdateFormData = birthdateElement.closest(".formData");
+  const quantity = quantityElement.value;
+  const quantityFormData = quantityElement.closest(".formData");
   const tournamentLocationFormData = document
     .querySelector("input[name='location']")
     .closest(".formData");
-  const termsOfUse = document.getElementById("termsOfUse").checked;
-  const termsOfUseFormData = document
-    .getElementById("termsOfUse")
-    .closest(".formData");
+  const termsOfUse = termsOfUseElement.checked;
+  const termsOfUseFormData = termsOfUseElement.closest(".formData");
 
   formData.forEach((error) => {
     error.setAttribute("data-error", "");
@@ -106,7 +118,7 @@ function validate() {
     isValid = false;
   }
 
-  if (!tournamentLocation) {
+  if (!tournamentLocationElement) {
     tournamentLocationFormData.setAttribute(
       "data-error",
       "Veuillez selectionner un tournoi"
@@ -136,10 +148,9 @@ function validate() {
     modalBody.appendChild(successMessage);
 
     closeButton.textContent = "Fermer";
-    closeButton.setAttribute("class", "btn-submit");
+    closeButton.setAttribute("class", "btn-submit btn-close");
     closeButton.addEventListener("click", closeModal);
     modalBody.appendChild(closeButton);
-    return false;
   } else {
     return false;
   }
