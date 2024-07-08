@@ -1,9 +1,9 @@
-const modalCloseButton = document.querySelector(".close");
-const modalBackground = document.querySelector(".bground");
+const modalCloseButton = document.querySelector(".closeModalButton");
+const modalBackground = document.querySelector(".modalBackground");
 const modalOpenButton = document.querySelectorAll(".modal-btn");
 const burgerMenu = document.getElementById("myTopnav");
 const subscribeForm = document.getElementById("subscribeForm");
-const modalBody = document.querySelector(".modal-body");
+const modalBody = document.querySelector(".modalBody");
 let originalModalContent = modalBody.innerHTML;
 
 modalOpenButton.forEach((btn) => btn.addEventListener("click", launchModal));
@@ -27,7 +27,21 @@ function closeModal() {
 }
 
 function editNav() {
-  burgerMenu.classList.toggle("responsive");
+  burgerMenu.classList.toggle("openMenu");
+}
+
+function setErrorMessage(input, message) {
+  const formData = input.closest(".formData");
+  const errorMessage = formData.querySelector(".error-message");
+  formData.className = "formData error";
+  errorMessage.innerText = message;
+  formData.setAttribute("data-error-visible", "true");
+}
+
+function setSuccess(input) {
+  const formData = input.closest(".formData");
+  formData.className = "formData";
+  formData.setAttribute("data-error-visible", "false");
 }
 
 function validate() {
@@ -55,90 +69,86 @@ function validate() {
   }
 
   const firstName = firstNameElement.value.trim();
-  const firstFormData = firstNameElement.closest(".formData");
   const lastName = lastNameElement.value.trim();
-  const lastFormData = lastNameElement.closest(".formData");
   const email = emailElement.value.trim();
-  const emailFormData = emailElement.closest(".formData");
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const birthdate = birthdateElement.value;
-  const birthdateFormData = birthdateElement.closest(".formData");
   const quantity = quantityElement.value;
-  const quantityFormData = quantityElement.closest(".formData");
-  const tournamentLocationFormData = document
-    .querySelector("input[name='location']")
-    .closest(".formData");
   const termsOfUse = termsOfUseElement.checked;
-  const termsOfUseFormData = termsOfUseElement.closest(".formData");
 
   formData.forEach((error) => {
-    error.setAttribute("data-error", "");
     error.setAttribute("data-error-visible", "false");
   });
 
   if (firstName === "" || firstName.length < 2) {
-    firstFormData.setAttribute(
-      "data-error",
+    setErrorMessage(
+      firstNameElement,
       "Veuillez saisir votre prénom (minimum 2 caractères)"
     );
-    firstFormData.setAttribute("data-error-visible", "true");
     isValid = false;
+  } else {
+    setSuccess(firstNameElement);
   }
 
   if (lastName === "" || lastName.length < 2) {
-    lastFormData.setAttribute(
-      "data-error",
+    setErrorMessage(
+      lastNameElement,
       "Veuillez saisir votre nom (minimum 2 caractères)"
     );
-    lastFormData.setAttribute("data-error-visible", "true");
     isValid = false;
+  } else {
+    setSuccess(lastNameElement);
   }
 
   if (!emailRegex.test(email)) {
-    emailFormData.setAttribute("data-error", "Veuillez saisir un email valide");
-    emailFormData.setAttribute("data-error-visible", "true");
+    setErrorMessage(emailElement, "Veuillez saisir un email valide");
     isValid = false;
+  } else {
+    setSuccess(emailElement);
   }
 
   if (birthdate === "") {
-    birthdateFormData.setAttribute(
-      "data-error",
+    setErrorMessage(
+      birthdateElement,
       "Veuillez saisir votre date de naissance"
     );
-    birthdateFormData.setAttribute("data-error-visible", "true");
     isValid = false;
+  } else {
+    setSuccess(birthdateElement);
   }
 
   if (quantity === "" || quantity < 0 || quantity > 99) {
-    quantityFormData.setAttribute(
-      "data-error",
+    setErrorMessage(
+      quantityElement,
       "Veuillez saisir le nombre de tournoi auquel vous avez participé (entre 0 et 99)"
     );
-    quantityFormData.setAttribute("data-error-visible", "true");
     isValid = false;
+  } else {
+    setSuccess(quantityElement);
   }
 
   if (!tournamentLocationElement) {
-    tournamentLocationFormData.setAttribute(
-      "data-error",
-      "Veuillez selectionner un tournoi"
-    );
-    tournamentLocationFormData.setAttribute("data-error-visible", "true");
+    const locationInput = document.querySelector("input[name='location']");
+    setErrorMessage(locationInput, "Veuillez sélectionner un tournoi");
     isValid = false;
+  } else {
+    setSuccess(tournamentLocationElement);
   }
 
   if (!termsOfUse) {
-    termsOfUseFormData.setAttribute(
-      "data-error",
+    setErrorMessage(
+      termsOfUseElement,
       "Veuillez accepter les conditions d'utilisation"
     );
-    termsOfUseFormData.setAttribute("data-error-visible", "true");
     isValid = false;
+  } else {
+    setSuccess(termsOfUseElement);
   }
 
   if (isValid) {
     const successMessage = document.createElement("p");
     const closeButton = document.createElement("button");
+    const modalHeight = modalBody.offsetHeight;
 
     originalModalContent = modalBody.innerHTML;
     modalBody.innerHTML = "";
@@ -151,6 +161,8 @@ function validate() {
     closeButton.setAttribute("class", "btn-submit btn-close");
     closeButton.addEventListener("click", closeModal);
     modalBody.appendChild(closeButton);
+
+    modalBody.style.height = modalHeight + "px";
   } else {
     return false;
   }
