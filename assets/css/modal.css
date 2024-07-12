@@ -21,6 +21,10 @@ img {
   padding-right: 1rem;
 }
 
+.no-scroll {
+  overflow: hidden;
+}
+
 .header {
   overflow: hidden;
   margin: 3.5%;
