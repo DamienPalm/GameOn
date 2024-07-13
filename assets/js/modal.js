@@ -4,16 +4,9 @@ const modalOpenButton = document.querySelectorAll(".modal-btn");
 const burgerMenu = document.getElementById("myTopnav");
 const subscribeForm = document.getElementById("subscribeForm");
 const modalBody = document.querySelector(".modalBody");
-let originalModalContent = modalBody.innerHTML;
 
 modalOpenButton.forEach((btn) => btn.addEventListener("click", launchModal));
 modalCloseButton.addEventListener("click", closeModal);
-subscribeForm.addEventListener("submit", function (event) {
-  event.preventDefault();
-  if (validate()) {
-    this.submit();
-  }
-});
 
 function launchModal() {
   modalBackground.classList.add("active");
@@ -23,7 +16,6 @@ function launchModal() {
 function closeModal() {
   modalBackground.classList.remove("active");
   document.body.removeAttribute("class", "no-scroll");
-  modalBody.innerHTML = originalModalContent;
 }
 
 function editNav() {
@@ -43,6 +35,16 @@ function setSuccess(input) {
   formData.className = "formData";
   formData.setAttribute("data-error-visible", "false");
 }
+
+subscribeForm.addEventListener("submit", function (event) {
+  event.preventDefault();
+  if (validate()) {
+    showSuccessMessage();
+    console.log("La validation a réussi");
+  } else {
+    console.log("La validation a échoué");
+  }
+});
 
 function validate() {
   const formData = document.querySelectorAll(".formData");
@@ -145,25 +147,26 @@ function validate() {
     setSuccess(termsOfUseElement);
   }
 
-  if (isValid) {
-    const successMessage = document.createElement("p");
-    const closeButton = document.createElement("button");
-    const modalHeight = modalBody.offsetHeight;
+  return true;
+}
 
-    originalModalContent = modalBody.innerHTML;
-    modalBody.innerHTML = "";
+function showSuccessMessage() {
+  const successMessage = document.createElement("p");
+  const closeButton = document.createElement("button");
 
-    successMessage.textContent = "Merci pour votre inscription";
-    successMessage.setAttribute("class", "modal__thanks-text");
-    modalBody.appendChild(successMessage);
+  modalBody.innerHTML = "";
 
-    closeButton.textContent = "Fermer";
-    closeButton.setAttribute("class", "btn-submit btn-close");
-    closeButton.addEventListener("click", closeModal);
-    modalBody.appendChild(closeButton);
+  successMessage.textContent = "Merci pour votre inscription";
+  successMessage.setAttribute("class", "modal__thanks-text");
+  modalBody.appendChild(successMessage);
 
-    modalBody.style.height = modalHeight + "px";
-  } else {
-    return false;
-  }
+  closeButton.textContent = "Fermer";
+  closeButton.setAttribute("class", "btn-submit btn-close");
+  closeButton.addEventListener("click", reload);
+  modalBody.appendChild(closeButton);
+}
+
+function reload() {
+  subscribeForm.reset();
+  window.location.reload();
 }
