@@ -146,7 +146,7 @@ function validate() {
     setSuccess(termsOfUseElement);
   }
 
-  return true;
+  isValid = true;
 }
 
 function showSuccessMessage() {
