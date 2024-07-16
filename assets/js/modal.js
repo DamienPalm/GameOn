@@ -7,6 +7,15 @@ const modalBody = document.querySelector(".modalBody");
 
 modalOpenButton.forEach((btn) => btn.addEventListener("click", launchModal));
 modalCloseButton.addEventListener("click", closeModal);
+subscribeForm.addEventListener("submit", function (event) {
+  event.preventDefault();
+  if (validate()) {
+    showSuccessMessage();
+    console.log("La validation a réussi");
+  } else {
+    console.log("La validation a échoué");
+  }
+});
 
 function launchModal() {
   modalBackground.classList.add("active");
@@ -35,16 +44,6 @@ function setSuccess(input) {
   formData.className = "formData";
   formData.setAttribute("data-error-visible", "false");
 }
-
-subscribeForm.addEventListener("submit", function (event) {
-  event.preventDefault();
-  if (validate()) {
-    showSuccessMessage();
-    console.log("La validation a réussi");
-  } else {
-    console.log("La validation a échoué");
-  }
-});
 
 function validate() {
   const formData = document.querySelectorAll(".formData");
