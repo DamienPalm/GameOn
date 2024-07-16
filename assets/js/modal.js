@@ -146,7 +146,11 @@ function validate() {
     setSuccess(termsOfUseElement);
   }
 
-  return true;
+  if (isValid) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function showSuccessMessage() {
